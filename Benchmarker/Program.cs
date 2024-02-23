@@ -12,70 +12,116 @@ using Newtonsoft.Json;
 
 public static class Program
 {
-    private static readonly string JsonURL = "http://localhost:5000/json";
-    private static readonly string BytesURL = "http://localhost:5000/bytes";
+    private static readonly string Host = "localhost";
+    private static readonly string JsonURL = $"http://{Host}:5000/json";
+    private static readonly string BytesURL = $"http://{Host}:5000/bytes";
 
     private static HttpClient HttpClient = new HttpClient();
-    private static Stopwatch timer = new Stopwatch();
 
     public static void Main(string[] args)
     {
         Console.WriteLine("Press any key to start...");
         Console.ReadKey();
 
-        BytesTest();
+        // 5 threads
+        new Thread(BytesTest).Start();
+        new Thread(BytesTest).Start();
+
+        Thread.Sleep(15_000);
 
         Console.WriteLine("Test Completed");
         Console.ReadKey();
     }
 
+    private static Person[] TestData()
+    {
+        List<Person> personList = new();
+
+        for (int i = 0; i < 4000; i++)
+        {
+            personList.Add(Person.GenerateRandomPerson(5));
+        }
+
+        return personList.ToArray();
+    }
+
     private static void BytesTest()
     {
-        Stopwatch timeTracker = new Stopwatch();
+        Console.WriteLine("Starting Binary test...");
+        Console.WriteLine("--------------------------");
 
-        int requestCounter = 0;
+        var testData = TestData();
 
-        timeTracker.Start();
-        while(timeTracker.ElapsedMilliseconds <= 10_000)
+        int byteCount = MessagePackSerializer.Serialize(testData).Length;
+        Console.WriteLine($"Testing with requests of {byteCount} bytes");
+        // Console.WriteLine();
+
+        var result = TestFor(10_000, () =>
         {
-            Person person = Person.GenerateRandomPerson();
-            byte[] arr = MessagePackSerializer.Serialize(person);
+            byte[] arr = MessagePackSerializer.Serialize(testData);
 
             var task = PostBytesAsync(BytesURL, arr);
+            task.Wait();
 
             var packet = MessagePackSerializer.Deserialize<ApiResponse>(task.Result);
             string response = MessagePackSerializer.Deserialize<string>(packet.Data);
+        });
 
-            requestCounter++;
-        }
-        timeTracker.Stop();
-
-        Console.WriteLine($"{requestCounter} requests per 10 seconds");
+        // Console.WriteLine("Results:");
+        // Console.WriteLine("-----------------------");
+        Console.WriteLine($"{result.Counter} requests made");
+        Console.WriteLine($"{result.TimePerAction:0.00} average request time");
     }
 
     private static void JsonTest()
     {
-        Stopwatch timeTracker = new Stopwatch();
+        Console.WriteLine("Starting JSON test...");
+        Console.WriteLine("--------------------------");
 
-        int requestCounter = 0;
+        var testData = TestData();
+
+        string jsonString = JsonConvert.SerializeObject(testData).Replace(" ", "");
+
+        int byteCount = Encoding.ASCII.GetByteCount(jsonString);
+        Console.WriteLine($"Testing with requests of {byteCount} bytes");
+        // Console.WriteLine();
+
+        var result = TestFor(10_000, () =>
+        {
+            var task = PostJsonAsync(JsonURL, testData);
+            task.Wait();
+        });
+
+        // Console.WriteLine("Results:");
+        // Console.WriteLine("-----------------------");
+        Console.WriteLine($"{result.Counter} requests made");
+        Console.WriteLine($"{result.TimePerAction:0.00} average request time");
+    }
+
+    private static (int Counter, float TimePerAction) TestFor(float time, Action act)
+    {
+        Stopwatch timeTracker = new();
+        Stopwatch actionTimer = new();
+
+        int counter = 0;
+        float actionTotal = 0;
 
         timeTracker.Start();
 
-        while(timeTracker.ElapsedMilliseconds <= 10_000)
+        while (timeTracker.ElapsedMilliseconds <= time)
         {
-            Person person = Person.GenerateRandomPerson();
+            actionTimer.Restart();
 
-            timer.Restart();
+            act.Invoke();
 
-            var task = PostJsonAsync(JsonURL, person);
-            task.Wait();
+            actionTimer.Stop();
 
-            requestCounter++;
+            actionTotal += actionTimer.ElapsedMilliseconds;
+
+            counter++;
         }
 
-        timeTracker.Stop();
-
-        Console.WriteLine($"{requestCounter} requests per 10 seconds");
+        return new(counter, actionTotal / (float)counter);
     }
 
     private static async Task<byte[]> PostBytesAsync(string uri, byte[] byteArray)
@@ -173,7 +219,7 @@ public class Person
     [Key(8)]
     public List<Game> Games { get; set; } = new List<Game>();
 
-    public static Person GenerateRandomPerson()
+    public static Person GenerateRandomPerson(int games)
     {
         Random random = new Random();
 
@@ -193,7 +239,7 @@ public class Person
             TopScore = random.Next(5, 100)
         };
 
-        for (int i = 0; i < 300; i++)
+        for (int i = 0; i < games; i++)
         {
             person.Games.Add(Game.RandomGame());
         }
