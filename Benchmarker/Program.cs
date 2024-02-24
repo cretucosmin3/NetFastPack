@@ -13,8 +13,8 @@ using Newtonsoft.Json;
 public static class Program
 {
     private static readonly string Host = "localhost";
-    private static readonly string JsonURL = $"http://{Host}:5000/json";
-    private static readonly string BytesURL = $"http://{Host}:5000/bytes";
+    private static readonly string JsonURL = $"http://{Host}:5000/api/example/json";
+    private static readonly string BytesURL = $"http://{Host}:5000/api/example/bytes";
 
     private static HttpClient HttpClient = new HttpClient();
 
@@ -23,11 +23,7 @@ public static class Program
         Console.WriteLine("Press any key to start...");
         Console.ReadKey();
 
-        // 5 threads
-        new Thread(BytesTest).Start();
-        new Thread(BytesTest).Start();
-
-        Thread.Sleep(15_000);
+        BytesTest();
 
         Console.WriteLine("Test Completed");
         Console.ReadKey();
@@ -37,7 +33,7 @@ public static class Program
     {
         List<Person> personList = new();
 
-        for (int i = 0; i < 4000; i++)
+        for (int i = 0; i < 1; i++)
         {
             personList.Add(Person.GenerateRandomPerson(5));
         }
@@ -63,8 +59,7 @@ public static class Program
             var task = PostBytesAsync(BytesURL, arr);
             task.Wait();
 
-            var packet = MessagePackSerializer.Deserialize<ApiResponse>(task.Result);
-            string response = MessagePackSerializer.Deserialize<string>(packet.Data);
+            string response = MessagePackSerializer.Deserialize<string>(task.Result);
         });
 
         // Console.WriteLine("Results:");
@@ -129,7 +124,7 @@ public static class Program
         using (var content = new ByteArrayContent(byteArray))
         {
             // Optionally, add any headers to the content. For example, content-type if it's known
-            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+            // content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
 
             try
             {

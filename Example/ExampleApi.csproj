@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+    <!-- NOTE: TargetFrameworkSwitcher inserts it, DO NOT EDIT YOURSELF and IT REQUIRES TOP-LEVEL EVALUATION BEFORE USING "TargetFramework" VARIABLE -->
+    <Import Project="$(MSBuildProjectDirectory)\TargetFrameworkSwitcher.targets" Condition="Exists('$(MSBuildProjectDirectory)\TargetFrameworkSwitcher.targets')" />
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>f5b30c4f-42a8-4146-8811-3f835ceb61c1</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.8.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" Version="8.0.0" />
+    <PackageReference Include="Serilog" Version="3.1.2-dev-02097" />
+    <PackageReference Include="MessagePack" Version="2.5.140" />
+  </ItemGroup>
+
+</Project>
