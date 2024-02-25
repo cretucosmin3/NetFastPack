@@ -13,7 +13,7 @@ public class BytesPackedResponseFilter : IAsyncResultFilter
     public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
     {
         // Check if the action is marked with the BytesPackedResponse attribute
-        var attribute = context.ActionDescriptor.EndpointMetadata.OfType<BytePacked>().FirstOrDefault();
+        var attribute = context.ActionDescriptor.EndpointMetadata.OfType<ByteResponse>().FirstOrDefault();
 
         if (attribute != null)
         {

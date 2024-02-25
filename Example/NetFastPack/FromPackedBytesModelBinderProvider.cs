@@ -3,15 +3,15 @@ using System;
 
 namespace NetFastPack;
 
-public class FromPackedBytesModelBinderProvider : IModelBinderProvider
+public class FromBytesModelBinderProvider : IModelBinderProvider
 {
     public IModelBinder? GetBinder(ModelBinderProviderContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
 
-        if (context.Metadata.IsComplexType && context.BindingInfo.BindingSource != null && context.BindingInfo.BindingSource.Id == "FromPackedBytes")
+        if (context.Metadata.IsComplexType && context.BindingInfo.BindingSource != null && context.BindingInfo.BindingSource.Id == "FromBytes")
         {
-            return new FromPackedBytesModelBinder();
+            return new FromBytesModelBinder();
         }
 
         return null;

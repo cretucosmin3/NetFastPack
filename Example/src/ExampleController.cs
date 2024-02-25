@@ -9,9 +9,9 @@ namespace Example.Controllers;
 [Route("api/example")]
 public class ExampleController : ControllerBase
 {
-    [BytePacked]
+    [ByteResponse]
     [HttpPost("bytes")]
-    public ActionResult GetPersonFromBytes([FromPackedBytes] Person person)
+    public ActionResult GetPersonFromBytes([FromBytes] Person person)
     {
         return Ok($"Hello {person.FirstName}!");
     }

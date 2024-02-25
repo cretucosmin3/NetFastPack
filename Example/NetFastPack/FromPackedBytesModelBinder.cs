@@ -7,7 +7,7 @@ using MessagePack;
 
 namespace NetFastPack;
 
-public class FromPackedBytesModelBinder : IModelBinder
+public class FromBytesModelBinder : IModelBinder
 {
     private static MessagePackSerializerOptions Options = MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4Block);
 

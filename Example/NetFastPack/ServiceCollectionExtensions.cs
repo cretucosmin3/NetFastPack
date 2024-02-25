@@ -10,7 +10,7 @@ public static class ServiceCollectionExtensions
             options.Filters.Add<BytesPackedResponseFilter>(int.MaxValue);
 
             // [FromPackedBytes]
-            options.ModelBinderProviders.Insert(0, new FromPackedBytesModelBinderProvider());
+            options.ModelBinderProviders.Insert(0, new FromBytesModelBinderProvider());
         });
 
         return services;

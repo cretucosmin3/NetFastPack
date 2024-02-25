@@ -7,14 +7,14 @@ namespace NetFastPack;
 /// Get request data from tightly packed serialized bytes.
 /// </summary>
 [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
-public class FromPackedBytesAttribute : ModelBinderAttribute
+public class FromBytesAttribute : ModelBinderAttribute
 {
-    public FromPackedBytesAttribute() : base()
+    public FromBytesAttribute() : base()
     {
-        BinderType = typeof(FromPackedBytesModelBinder);
+        BinderType = typeof(FromBytesModelBinder);
         BindingSource = BindingSource.Custom;
 
         // Set a unique ID for your custom binding source
-        this.BindingSource = new BindingSource("FromPackedBytes", "From Packed Bytes", isGreedy: true, isFromRequest: true);
+        this.BindingSource = new BindingSource("FromBytes", "From Bytes", isGreedy: true, isFromRequest: true);
     }
 }
