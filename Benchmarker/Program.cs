@@ -35,15 +35,6 @@ public static class Program
     private static Person TestData()
     {
         return Person.GenerateRandomPerson(50);
-
-        // List<Person> personList = new();
-
-        // for (int i = 0; i < 1; i++)
-        // {
-        //     personList.Add(Person.GenerateRandomPerson(5));
-        // }
-
-        // return personList.ToArray();
     }
 
     private static void Warmup()
