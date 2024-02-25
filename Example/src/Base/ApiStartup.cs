@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using NetFastPack;
+using Newtonsoft.Json;
 
 namespace Example.Base;
 
@@ -13,15 +14,15 @@ public abstract class ApiStartup
 
     public virtual void ConfigureServices(IServiceCollection services)
     {
+        services.AddNetFastPack();
+
         services.AddLogging(builder =>
         {
-            // builder.ClearProviders();
+            builder.ClearProviders();
             builder.SetMinimumLevel(LogLevel.Critical);
         });
 
         AddWebApiInitialization(services);
-
-        FluentValidation.ValidatorOptions.Global.LanguageManager.Enabled = false;
 
         services.AddHttpContextAccessor();
     }

@@ -1,7 +1,5 @@
 
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Example.Base;
-using NetFastPack;
 
 namespace Example.Service
 {
@@ -12,8 +10,6 @@ namespace Example.Service
         public override void ConfigureServices(IServiceCollection services)
         {
             base.ConfigureServices(services);
-
-            services.AddNetFastPack();
         }
     }
 }

@@ -1,28 +1,26 @@
-using NetFastPack;
+using MessagePack;
 
-namespace Example.Base.Types;
-
-[BytePacked]
+[MessagePackObject]
 public class Account
 {
-    [Ix(0)]
+    [Key(0)]
     public int Age { get; set; }
 
-    [Ix(1)]
+    [Key(1)]
     public string FirstName { get; set; }
 
-    [Ix(2)]
+    [Key(2)]
     public string LastName { get; set; }
 
-    [Ix(3)]
+    [Key(3)]
     public bool CanLogin { get; set; }
 
-    [Ix(4)]
+    [Key(4)]
     public bool IsDeleted { get; set; }
 
-    [Ix(5)]
+    [Key(5)]
     public int LoginAttemptsLeft { get; set; }
 
-    [Ix(6)]
+    [Key(6)]
     public List<Document> Documents { get; set; } = new List<Document>();
 }

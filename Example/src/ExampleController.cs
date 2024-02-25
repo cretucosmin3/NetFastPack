@@ -6,19 +6,32 @@ using Microsoft.AspNetCore.Mvc;
 namespace Example.Controllers;
 
 [ApiController]
-[Route("api/example")]
+[Route("api/documents")]
 public class ExampleController : ControllerBase
 {
     [ByteResponse]
-    [HttpPost("bytes")]
-    public ActionResult GetPersonFromBytes([FromBytes] Person person)
+    [HttpGet("bytes")]
+    public ActionResult GetDocumentsInBytes()
     {
-        return Ok($"Hello {person.FirstName}!");
+        return Ok(SampleData.RandomSampleAccount(20));
     }
 
-    [HttpPost("json")]
-    public ActionResult GetPersonFromJson([FromBody] Person person)
+    [HttpGet("json")]
+    public ActionResult GetDocumentsInJson()
     {
-        return Ok($"Hello {person.FirstName}!");
+        return Ok(SampleData.RandomSampleAccount(20));
+    }
+
+    [ByteResponse]
+    [HttpPost("upload-bytes")]
+    public ActionResult UploadFromBytes([FromBytes] Account account)
+    {
+        return Ok($"Hello {account.FirstName}!");
+    }
+
+    [HttpPost("upload-json")]
+    public ActionResult UploadFromJson([FromBody] Account account)
+    {
+        return Ok($"Hello {account.FirstName}!");
     }
 }
