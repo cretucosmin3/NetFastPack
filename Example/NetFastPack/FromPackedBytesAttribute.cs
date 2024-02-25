@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 namespace NetFastPack;
 
 /// <summary>
-/// Get data from tightly packed serialized bytes.
+/// Get request data from tightly packed serialized bytes.
 /// </summary>
 [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
 public class FromPackedBytesAttribute : ModelBinderAttribute

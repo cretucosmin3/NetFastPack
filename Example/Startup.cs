@@ -13,15 +13,7 @@ namespace Example.Service
         {
             base.ConfigureServices(services);
 
-            services.Configure<KestrelServerOptions>(options =>
-            {
-                options.AllowSynchronousIO = true;
-            });
-
-            services.AddControllers(options =>
-            {
-                options.ModelBinderProviders.Insert(0, new FromPackedBytesModelBinderProvider());
-            });
+            services.AddNetFastPack();
         }
     }
 }

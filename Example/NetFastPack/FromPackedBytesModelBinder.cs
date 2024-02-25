@@ -9,6 +9,8 @@ namespace NetFastPack;
 
 public class FromPackedBytesModelBinder : IModelBinder
 {
+    private static MessagePackSerializerOptions Options = MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4Block);
+
     public async Task BindModelAsync(ModelBindingContext bindingContext)
     {
         ArgumentNullException.ThrowIfNull(bindingContext);
@@ -28,10 +30,11 @@ public class FromPackedBytesModelBinder : IModelBinder
             var deserializedObject = await MessagePackSerializer.DeserializeAsync(
                 bindingContext.ModelType,
                 inputStream,
-                MessagePackSerializerOptions.Standard,
+                Options,
                 bindingContext.HttpContext.RequestAborted
             );
 
+            bindingContext.HttpContext.Response.ContentType = "application/x-msgpack";
             bindingContext.Result = ModelBindingResult.Success(deserializedObject);
         }
         catch (Exception ex)

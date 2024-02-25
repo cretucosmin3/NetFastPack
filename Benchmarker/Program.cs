@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 
 public static class Program
 {
+    private static MessagePackSerializerOptions Options = MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4Block);
     private static readonly string Host = "localhost";
     private static readonly string JsonURL = $"http://{Host}:5000/api/example/json";
     private static readonly string BytesURL = $"http://{Host}:5000/api/example/bytes";
@@ -22,56 +23,78 @@ public static class Program
     {
         Console.WriteLine("Press any key to start...");
         Console.ReadKey();
-
+        
+        Warmup();
         BytesTest();
+        JsonTest();
 
         Console.WriteLine("Test Completed");
         Console.ReadKey();
     }
 
-    private static Person[] TestData()
+    private static Person TestData()
     {
-        List<Person> personList = new();
+        return Person.GenerateRandomPerson(50);
 
-        for (int i = 0; i < 1; i++)
+        // List<Person> personList = new();
+
+        // for (int i = 0; i < 1; i++)
+        // {
+        //     personList.Add(Person.GenerateRandomPerson(5));
+        // }
+
+        // return personList.ToArray();
+    }
+
+    private static void Warmup()
+    {
+        Console.WriteLine("Warmup started");
+
+        var testData = TestData();
+
+        var result = TestFor(5000, () =>
         {
-            personList.Add(Person.GenerateRandomPerson(5));
-        }
+            var task = PostJsonAsync(JsonURL, testData);
+            task.Wait();
+        });
 
-        return personList.ToArray();
+        Console.WriteLine("Warmup Completed \n\n");
     }
 
     private static void BytesTest()
     {
-        Console.WriteLine("Starting Binary test...");
-        Console.WriteLine("--------------------------");
+        Console.WriteLine("---------------------------");
+        Console.WriteLine("------: Binary test :------");
+        Console.WriteLine("---------------------------");
 
         var testData = TestData();
 
-        int byteCount = MessagePackSerializer.Serialize(testData).Length;
+        int byteCount = MessagePackSerializer.Serialize(testData, options: Options).Length;
         Console.WriteLine($"Testing with requests of {byteCount} bytes");
-        // Console.WriteLine();
+        Console.WriteLine();
 
         var result = TestFor(10_000, () =>
         {
-            byte[] arr = MessagePackSerializer.Serialize(testData);
+            byte[] arr = MessagePackSerializer.Serialize(testData, options: Options);
 
             var task = PostBytesAsync(BytesURL, arr);
             task.Wait();
 
-            string response = MessagePackSerializer.Deserialize<string>(task.Result);
+            string response = MessagePackSerializer.Deserialize<string>(task.Result, options: Options);
         });
 
-        // Console.WriteLine("Results:");
-        // Console.WriteLine("-----------------------");
+        Console.WriteLine("Results:");
+        Console.WriteLine("-----------------------");
         Console.WriteLine($"{result.Counter} requests made");
         Console.WriteLine($"{result.TimePerAction:0.00} average request time");
+        Console.WriteLine("=============================\n\n\n");
     }
 
     private static void JsonTest()
     {
-        Console.WriteLine("Starting JSON test...");
-        Console.WriteLine("--------------------------");
+        Console.WriteLine("---------------------------");
+        Console.WriteLine("-------: JSON test :-------");
+        Console.WriteLine("---------------------------");
 
         var testData = TestData();
 
@@ -79,7 +102,7 @@ public static class Program
 
         int byteCount = Encoding.ASCII.GetByteCount(jsonString);
         Console.WriteLine($"Testing with requests of {byteCount} bytes");
-        // Console.WriteLine();
+        Console.WriteLine();
 
         var result = TestFor(10_000, () =>
         {
@@ -87,10 +110,11 @@ public static class Program
             task.Wait();
         });
 
-        // Console.WriteLine("Results:");
-        // Console.WriteLine("-----------------------");
+        Console.WriteLine("Results:");
+        Console.WriteLine("-----------------------");
         Console.WriteLine($"{result.Counter} requests made");
         Console.WriteLine($"{result.TimePerAction:0.00} average request time");
+        Console.WriteLine("=============================\n\n\n");
     }
 
     private static (int Counter, float TimePerAction) TestFor(float time, Action act)
@@ -124,7 +148,7 @@ public static class Program
         using (var content = new ByteArrayContent(byteArray))
         {
             // Optionally, add any headers to the content. For example, content-type if it's known
-            // content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-msgpack");
 
             try
             {

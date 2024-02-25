@@ -1,36 +1,24 @@
 
-using Example.Base;
+using NetFastPack;
 using Example.Base.Types;
 using Microsoft.AspNetCore.Mvc;
-using NetFastPack;
 
 namespace Example.Controllers;
 
 [ApiController]
 [Route("api/example")]
-public class ExampleController : ApiControllerBase
+public class ExampleController : ControllerBase
 {
+    [BytePacked]
     [HttpPost("bytes")]
-    public ActionResult GetPersonFromBytes([FromPackedBytes] Person[] data)
+    public ActionResult GetPersonFromBytes([FromPackedBytes] Person person)
     {
-        if (data != null)
-            return Ok($"Hello {data[0].FirstName}!");
-
-        return Ok($"Who are you?");
+        return Ok($"Hello {person.FirstName}!");
     }
 
     [HttpPost("json")]
-    public ActionResult GetPersonFromJson([FromBody] Person[] data)
+    public ActionResult GetPersonFromJson([FromBody] Person person)
     {
-        if (data != null)
-            return Ok($"Hello {data[0].FirstName}!", packed: false);
-
-        return Ok($"Who are you?", packed: false);
-    }
-
-    [HttpGet("page")]
-    public ActionResult Page()
-    {
-        return Ok($"Bob", packed: false);
+        return Ok($"Hello {person.FirstName}!");
     }
 }
