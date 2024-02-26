@@ -76,6 +76,8 @@ That's all! I promised you minimal hassle.
     - One main argument against this approach is that it's not human readable, in reality this is not a good argument because regardless of its shape, if the data doesn't match the schema, your endpoint should return a 415 (Unsupported Media Type).
 - More tests to highlight the positives and negatives.
 
+<br>
+
 ## Ok but what about performance?
 
 To benchmark this the following models were used. <br>
