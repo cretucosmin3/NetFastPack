@@ -2,6 +2,10 @@
 
 This project aims to simplify the use of [MessagePack](https://msgpack.org/index.html) in C# web APIs.
 
+Let's get the elephant out of the room, **yes**, bytes are not readable, but, this argument is not valid because json or not, if the schema doesn't fit your API will return 415 (Unsupported Media Type) so you will know why it failed.
+
+Now, let's continue...
+
 MessagePack is very performant and we can use it to improve and help scale our APIs, some considerations:
 - Improve overall data transfer (with small models it also help with < 4g connections).
 - Improve data parsing so your API can process more requests and cope better when highly loaded.
@@ -73,7 +77,6 @@ That's all! I promised you minimal hassle.
 
 ## Future improvements
 - JSON parsing on development so that you can develop in peace and read the content.
-    - One main argument against this approach is that it's not human readable, in reality this is not a good argument because regardless of its shape, if the data doesn't match the schema, your endpoint should return a 415 (Unsupported Media Type).
 - More tests to highlight the positives and negatives.
 
 <br>
@@ -89,7 +92,7 @@ Where the charts will mention data size, what that refers to is the number of do
 
 #### Some things to keep in mind for all benchmarks below.
 - No networking delays involved, all tested locally.
-- Requests were sent for 6 seconds
+- Requests were sent for 6 seconds each batch.
 - Test data was randomized once and used for both to make sure it's a fair comparison.
 <br>
 
