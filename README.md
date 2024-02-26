@@ -8,9 +8,9 @@ First, let's address the elephant in the room: **yes**, bytes are not readable. 
 Now let's continue...
 
 MessagePack is very performant and we can use it to improve and help scale our APIs, some considerations:
-- Improve overall data transfer (with small models it also help with < 4g connections).
+- Improve overall data transfer (with small models it also helps with < 4g connections).
 - Improve data parsing so your API can process more requests and cope better when highly loaded.
-- Improve sending & parsing of large responses such as big listed & nested objects.
+- Improve sending & parsing of large requests / responses such as big listed & nested objects.
 
 <br>
 
