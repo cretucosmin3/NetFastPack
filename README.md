@@ -100,8 +100,8 @@ Where the charts will mention data size, what that refers to is the number of do
 ---
 
 ### Requests made Binary vs Json
-As you can see, at every scale Binary is always better, but especially at very large objects.<br>
-At 5120 documents, through binary 701 requests were made and only 127 with json, that is 5.5x
+As you can see, at every scale Binary is always better, but especially with very large objects.<br>
+At 5120 documents, `Binary = 701` requests, `JSON = 127`, that is 5.5x the requests.
 
 ![Requests JSON vs Binary](https://github.com/cretucosmin3/NetFastPack/blob/main/Github/requests-chart.png?raw=true)
 
