@@ -2,7 +2,13 @@
 
 This project aims to simplify the use of [MessagePack](https://msgpack.org/index.html) in C# web APIs.
 
-The performance of MessagePack is incredible and can be a viable solution to scale APIs if implemented & used properly.<br>
+MessagePack is very performant and we can use it to improve and help scale our APIs, some considerations:
+- Improve overall data transfer (with small models it also help with < 4g connections).
+- Improve data parsing so your API can process more requests and cope better when highly loaded.
+- Improve sending & parsing of large responses such as big listed & nested objects.
+
+<br>
+
 There are some solutions out there to implement MessagePack but this should give you a way with minimal hassle.
 
 ## Quick Start
@@ -17,7 +23,7 @@ public virtual void ConfigureServices(IServiceCollection services)
 ```
 <br>
 
-II. To deserialize & serialize you need to use 2 attributes, **[ByteResponse]** and **[FromBytes]**.<br>
+II. To deserialize & serialize you need to use 2 attributes, `[ByteResponse]` and `[FromBytes]`.<br>
 These two can be used independently e.g., if you only want to receive bytes but still want to return json.
 
 ```csharp
@@ -34,7 +40,7 @@ public ActionResult UploadFromBytes([FromBytes] User user)
 
 <br>
 
-III. In order for all the magic from above to work, you need to add these two attributes to your models, **[BytePacked]** and **[Ix]** these are **[MessagePackObject]** and **[Key]** from the MessagePack library, they're renamed so you don't have to import 2 libraries, also BytePacked is subjectively a better naming for our use case.
+III. In order for all the above magic to work, you need to add these two attributes to your models, `[BytePacked]` and `[Ix]` these are `[MessagePackObject]` and `[Key]` from the MessagePack library, they're renamed so you don't have to import 2 libraries, also BytePacked is subjectively a better naming for our use case.
 
 ```csharp
 [BytePacked]
@@ -59,9 +65,9 @@ That's all! I promised you minimal hassle.
 ---
 
 ### How does this black magic work behind the scene?
-- [ByteResponse] - A filter is configured in your services to run last on your endpoint response, this uses MessagePack to pack the response body to an array of bytes. This ensures any kind of object will be serialized as long as you have your attributes in the right place.
+- `[ByteResponse]` - A filter is configured in your services to run last on your endpoint response, this uses MessagePack to pack the response body to an array of bytes. This ensures any kind of object will be serialized as long as you have your attributes in the right place.
 
-- [FromBytes] - A model binder is configured to parse the request data to your required object, this custom model binder replaces the default binder.
+- `[FromBytes]` - A model binder is configured to parse the request data to your required object, this custom model binder replaces the default binder.
 
 <br>
 
