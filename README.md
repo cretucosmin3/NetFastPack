@@ -7,8 +7,7 @@ There are some solutions out there to implement MessagePack but this should give
 
 ## Quick Start
 
-I. Configure it
-    You only need to call one method to configure the service into your API.
+I. You only need to call one method to configure the service into your API.
 
 ```csharp
 public virtual void ConfigureServices(IServiceCollection services)
