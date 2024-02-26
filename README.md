@@ -45,7 +45,7 @@ public ActionResult UploadFromBytes([FromBytes] User user)
 
 <br>
 
-III. In order for all the above magic to work, you need to add these two attributes to your models, `[BytePacked]` and `[Ix]` these are `[MessagePackObject]` and `[Key]` from the MessagePack library, they're renamed so you don't have to import 2 libraries, also BytePacked is subjectively a better naming for our use case.
+III. In order for all the above magic to work, you need to add these two attributes to your models, `[BytePacked]` and `[Ix]` these are `[MessagePackObject]` and `[Key]` from the MessagePack library, they're renamed so you don't have to import 2 libraries, also BytePacked is objectively a better naming for our use case.
 
 ```csharp
 [BytePacked]
