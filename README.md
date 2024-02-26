@@ -2,9 +2,10 @@
 
 This project aims to simplify the use of [MessagePack](https://msgpack.org/index.html) in C# web APIs.
 
-Let's get the elephant out of the room, **yes**, bytes are not readable, but, this argument is not valid because json or not, if the schema doesn't fit your API will return 415 (Unsupported Media Type) so you will know why it failed.
 
-Now, let's continue...
+First, let's address the elephant in the room: **yes**, bytes are not readable. However, this argument is not valid because, whether it's JSON or not, if the schema doesn't match, your API will return a 415 (Unsupported Media Type), so you will know why it failed.
+
+Now let's continue...
 
 MessagePack is very performant and we can use it to improve and help scale our APIs, some considerations:
 - Improve overall data transfer (with small models it also help with < 4g connections).
